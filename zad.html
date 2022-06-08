@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title> Form </title>
+    <script>
+   
+    function send()
+    {
+        let name = document.getElementById("name").value;
+        let amount = document.getElementById("amount").value;
+        let price = document.getElementById("price").value;
+        const data = { name: name,amount:amount,price:price };
+
+        fetch('/submit', {  method: 'POST',  headers: {  'Content-Type': 'application/json', },  body: JSON.stringify(data),  })
+        .then(function (response) {
+            response.text().then(data=>{
+            let myObj= JSON.parse(data);
+            let text = "<table border='1'>"
+            for (let x in myObj) {
+                text += "<tr>";
+                text+="<td>" + myObj[x].name + "</td>"
+                text+="<td>" + myObj[x].amount + "</td>"
+                text+="<td>" + myObj[x].price + "</td>"
+                text+="</tr>";
+            }
+            text += "</table>"
+            document.getElementById("res").innerHTML = text;
+            });  
+           
+        })
+        .catch(function (error) { window.alert(error); });
+    }
+    </script>
+  </head>
+  <body>
+      <div style="display: flex;flex-direction: column;">
+        <div style="display: flex;">NAZWA<input id="name"></div>
+        <div>ILOSC<input id="amount"></div>
+        <div>CENA<input id="price"></div>
+    </div>
+    <button onclick="send()">Wyślij</button>
+    <div id="res"></div>
+  </body>
+</html>
